@@ -203,31 +203,5 @@
             </div>
         </section>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const userMenu = document.getElementById('userMenu');
-            if (userMenu) {
-                const trigger = userMenu.querySelector('.user-trigger');
-                const dropdown = document.getElementById('dropdownContent');
-
-                trigger.addEventListener('click', function (event) {
-                    event.stopPropagation();
-                    dropdown.classList.toggle('show');
-                    userMenu.classList.toggle('open');
-                });
-
-                // Đóng dropdown khi click ra ngoài
-                window.addEventListener('click', function (e) {
-                    if (!userMenu.contains(e.target)) {
-                        if (dropdown.classList.contains('show')) {
-                            dropdown.classList.remove('show');
-                            userMenu.classList.remove('open');
-                        }
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 </html>
