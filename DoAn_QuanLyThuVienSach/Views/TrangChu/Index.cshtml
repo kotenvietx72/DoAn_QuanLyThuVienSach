@@ -187,7 +187,7 @@
                             <p class="book-author">
                                 @string.Join(", ", book.BookAuthors.Select(ba => ba.Author.Name))
                             </p>
-                            <a href="@Url.Action("Details", "Book", new { id = book.BookId })" class="btn-details">Xem Chi Tiết</a>
+                            <a href="@Url.Action("Detail", "TrangChu", new { id = book.BookId })" class="btn-details">Xem Chi Tiết</a>
                         </div>
                     </div>
                 }

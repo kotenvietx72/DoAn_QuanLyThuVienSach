@@ -23,6 +23,7 @@ namespace DoAn_QuanLyThuVienSach.Data
        
         public DbSet<Loan> Loans { get; set; }
 
+        public DbSet<CategoryGroup> CategoryGroups { get; set; }
 
         public DataContext (DbContextOptions<DataContext> options) : base (options) { }
 
@@ -89,6 +90,12 @@ namespace DoAn_QuanLyThuVienSach.Data
                 .WithMany(m => m.Loans)
                 .HasForeignKey(l => l.MemberId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Category>()
+            .HasOne(c => c.CategoryGroup)
+            .WithMany(g => g.Categories)
+            .HasForeignKey(c => c.CategoryGroupId);
+
             base.OnModelCreating(modelBuilder);
         }
     }

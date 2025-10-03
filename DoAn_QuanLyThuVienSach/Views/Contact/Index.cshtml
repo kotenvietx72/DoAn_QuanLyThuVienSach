@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Thông tin & Liên hệ";
+}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<br />
+<div class="contact-page-content">
+
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            <strong>Thành công!</strong> @ViewBag.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <section class="info-banner text-center py-5">
+        <h1 class="display-4 fw-bold mb-3">Kết nối với Thư Viện Vanh Vanh</h1>
+        <p class="lead text-muted">Chúng tôi sẵn lòng lắng nghe ý kiến, thắc mắc và mọi đóng góp của bạn.</p>
+    </section>
+
+    <hr class="my-5">
+
+    <section class="contact-details row text-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="contact-card">
+                <i class="fas fa-map-marker-alt fa-3x primary-color mb-3"></i>
+                <h4 class="fw-bold">Địa chỉ</h4>
+                <p>Phù Đổng, Gia Lâm, Hà Nội</p>
+                <p class="text-muted">Giờ mở cửa: 8:00 - 17:00 (T2-T6)</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="contact-card">
+                <i class="fas fa-phone-alt fa-3x primary-color mb-3"></i>
+                <h4 class="fw-bold">Điện thoại & Email</h4>
+                <p>Hotline: 0971 975 053</p>
+                <p>Email: nvanh.dhti16a1cl@sv.uneti.edu.vn</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="contact-card">
+                <i class="fas fa-comments fa-3x primary-color mb-3"></i>
+                <h4 class="fw-bold">Hỗ trợ Trực tuyến</h4>
+                <p>Chat trực tuyến qua Zalo hoặc Fanpage</p>
+                <a href="https://www.facebook.com/viet.anh.313430" target="_blank" class="btn btn-sm btn-outline-primary mt-2">Truy cập Fanpage</a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="my-5">
+
+    <section class="contact-form-section mb-5">
+        <h2 class="text-center mb-4 fw-bold">Gửi thư cho chúng tôi</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="post" asp-controller="Contact" asp-action="Send">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Họ tên</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Chủ đề</label>
+                        <input type="text" class="form-control" id="subject">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Nội dung</label>
+                        <textarea class="form-control" id="message" rows="5" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg custom-btn">Gửi Tin Nhắn</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>

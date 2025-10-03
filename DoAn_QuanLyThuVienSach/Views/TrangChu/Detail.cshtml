@@ -1,0 +1,92 @@
+﻿@model DoAn_QuanLyThuVienSach.Models.Book
+
+@{
+    ViewData["Title"] = Model.Title;
+    var authors = Model.BookAuthors.Select(ba => ba.Author.Name).ToList();
+    var authorsString = string.Join(", ", authors);
+    // Để dùng cho hover effect của nút mượn sách
+    var primaryColorRgb = "93, 156, 236"; // RGB của #5D9CEC
+
+    var categories = Model.BookCategories.Select(bc => bc.Category.Name).ToList();
+    var categoriesString = string.Join(", ", categories);
+}
+
+<style>
+    /* Định nghĩa biến CSS cục bộ cho trang này nếu cần */
+    :root {
+        --primary-color-rgb: @primaryColorRgb;
+    }
+</style>
+
+<div class="book-detail-container">
+    <div class="row">
+
+        <div class="col-md-4 text-center">
+            <div class="cover-image-box">
+                <img src="@Url.Content(Model.CoverImage ?? "~/images/default_cover.png")"
+                     alt="Bìa sách @Model.Title" class="book-cover-large" />
+            </div>
+
+            <div class="action-box mt-4">
+                @if (ViewBag.IsAvailable)
+                {
+                    <a asp-controller="MuonTra" asp-action="Muon" asp-route-bookId="@Model.BookId"
+                       class="btn btn-primary btn-lg btn-borrow">
+                        <i class="fas fa-hand-holding-box"></i> Mượn Sách
+                    </a>
+                }
+                else
+                {
+                    <button class="btn btn-secondary btn-lg btn-borrow" disabled>
+                        Hết Sách
+                    </button>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-8 book-info-content">
+            <h1 class="book-title-main">@Model.Title</h1>
+
+            <p class="book-author-main">
+                <i class="fas fa-user-edit"></i>
+                Tác giả:
+                <span class="author-name">@authorsString</span>
+            </p>
+
+            <div class="detail-summary my-4">
+                <h4 class="info-heading">Tóm tắt nội dung</h4>
+                <p class="description-text">@Model.Description</p>
+            </div>
+
+            <div class="detail-metadata">
+                <h4 class="info-heading">Thông tin chi tiết</h4>
+                <ul class="list-unstyled metadata-list">
+                    <li>
+                        <i class="fas fa-calendar-alt"></i>
+                        Năm xuất bản: <strong>@Model.PublicationYear</strong>
+                    </li>
+                    <li>
+                        <i class="fas fa-university"></i>
+                        Nhà xuất bản: <strong>@Model.Publisher.Name</strong>
+                    </li>
+                    <li>
+                        <i class="fas fa-cubes"></i>
+                        Số lượng hiện có: <strong>@Model.TotalCopies</strong>
+                    </li>
+
+                    <li>
+                        <i class="fas fa-tags"></i>
+                        Thể loại: <strong>@categoriesString</strong>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <hr class="mt-5 mb-4" />
+    <section class="review-section">
+        <h3 class="text-center info-heading">Đánh giá & Bình luận</h3>
+        <p class="text-center text-muted">Chưa có đánh giá nào cho cuốn sách này. Hãy là người đầu tiên!</p>
+    </section>
+</div>

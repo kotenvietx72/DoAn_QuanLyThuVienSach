@@ -42,7 +42,6 @@ namespace DoAn_QuanLyThuVienSach.Controllers
                 return View();
             }
 
-
             HttpContext.Session.SetString("Username", user.Name);
             return RedirectToAction("Index", "TrangChu"); // Chuyển về trang chủ
         }
