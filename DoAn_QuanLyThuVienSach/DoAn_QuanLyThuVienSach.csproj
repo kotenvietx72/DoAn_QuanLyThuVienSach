@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Image\01.jpg" />
+    <None Include="wwwroot\Image\02.jpeg" />
+    <None Include="wwwroot\Image\03.jpg" />
+    <None Include="wwwroot\Image\04.jpg" />
+    <None Include="wwwroot\Image\05.jpg" />
+    <None Include="wwwroot\Image\06.jpg" />
+    <None Include="wwwroot\Image\07.jpg" />
+    <None Include="wwwroot\Image\08.jpg" />
+    <None Include="wwwroot\Image\09.jpg" />
+    <None Include="wwwroot\Image\10.jpg" />
+    <None Include="wwwroot\Image\11.jpg" />
+    <None Include="wwwroot\Image\12.jpg" />
+    <None Include="wwwroot\Image\13.jpg" />
+    <None Include="wwwroot\Image\14.jpg" />
+    <None Include="wwwroot\Image\15.jpg" />
+    <None Include="wwwroot\Image\16.jpg" />
+    <None Include="wwwroot\Image\17.jpg" />
+    <None Include="wwwroot\Image\18.jpg" />
+    <None Include="wwwroot\Image\19.jpg" />
+    <None Include="wwwroot\Image\20.jpg" />
+    <None Include="wwwroot\Image\21.jpg" />
+    <None Include="wwwroot\Image\22.png" />
+    <None Include="wwwroot\Image\23.jpg" />
+    <None Include="wwwroot\Image\24.jpg" />
+    <None Include="wwwroot\Image\25.jpg" />
+    <None Include="wwwroot\Image\26.jpg" />
+    <None Include="wwwroot\Image\27.jpg" />
+    <None Include="wwwroot\Image\28.jpg" />
+    <None Include="wwwroot\Image\29.jpg" />
+    <None Include="wwwroot\Image\30.jpg" />
+    <None Include="wwwroot\Image\31.jpg" />
+    <None Include="wwwroot\Image\32.png" />
+    <None Include="wwwroot\Image\33.jpg" />
+    <None Include="wwwroot\Image\34.jpg" />
+    <None Include="wwwroot\Image\35.jpg" />
+    <None Include="wwwroot\Image\36.jpg" />
+    <None Include="wwwroot\Image\37.jpg" />
+    <None Include="wwwroot\Image\38.jpg" />
+    <None Include="wwwroot\Image\39.jpg" />
+    <None Include="wwwroot\Image\40.jpg" />
+    <None Include="wwwroot\Image\41.jpg" />
+    <None Include="wwwroot\Image\42.jpg" />
+    <None Include="wwwroot\Image\43.jpg" />
+    <None Include="wwwroot\Image\44.jpg" />
+    <None Include="wwwroot\Image\45.jpg" />
+    <None Include="wwwroot\Image\46.jpg" />
+    <None Include="wwwroot\Image\47.jpg" />
+    <None Include="wwwroot\Image\48.jpg" />
+    <None Include="wwwroot\Image\49.jpg" />
+    <None Include="wwwroot\Image\50.jpg" />
+    <None Include="wwwroot\Image\51.jpg" />
+    <None Include="wwwroot\Image\52.jpg" />
+    <None Include="wwwroot\Image\53.jpg" />
+    <None Include="wwwroot\Image\54.jpg" />
+    <None Include="wwwroot\Image\55.jpg" />
+    <None Include="wwwroot\Image\56.jpg" />
+    <None Include="wwwroot\Image\57.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.9" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,482 @@
+﻿@{
+    // Bạn có thể bỏ trống phần Layout nếu muốn trang này không kế thừa từ file layout chung
+    Layout = null;
+    ViewBag.Title = "Đăng nhập";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Quản Lý Thư Viện</title>
+    <!-- Tích hợp Font Awesome để sử dụng icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Tích hợp Google Fonts để có font chữ đẹp -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset và Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            overflow: hidden; /* Tránh scrollbar khi có animation */
+        }
+
+        h1 {
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            color: #333;
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+            color: #eee;
+        }
+
+        span {
+            font-size: 12px;
+        }
+
+        a {
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+        button {
+            border-radius: 20px;
+            border: 1px solid #9b59b6;
+            background-color: #9b59b6;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in, background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+            button:active {
+                transform: scale(0.95);
+            }
+
+            button:focus {
+                outline: none;
+            }
+
+            /* Nút có viền */
+            button.ghost {
+                background-color: transparent;
+                border-color: #FFFFFF;
+            }
+
+            button:hover {
+                background-color: #71b7e6;
+                border-color: #71b7e6;
+            }
+
+
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+        }
+
+        .input-container {
+            position: relative;
+            margin: 8px 0;
+            width: 100%;
+        }
+
+            .input-container i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #aaa;
+            }
+
+        input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px 12px 40px; /* Thêm padding bên trái cho icon */
+            width: 100%;
+            border-radius: 8px;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+
+            input:focus {
+                box-shadow: 0 0 5px rgba(113, 183, 230, 0.8);
+                background-color: #fff;
+            }
+
+        /* Container chính */
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 30px; /* Tạo khoảng cách với form */
+            z-index: 101;
+        }
+
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .overlay {
+            background: #FF416C;
+            background: -webkit-linear-gradient(to right, #71b7e6, #9b59b6);
+            background: linear-gradient(to right, #71b7e6, #9b59b6);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .alert-danger {
+            background: rgba(255, 0, 0, 0.1);
+            color: #e74c3c;
+            padding: 10px 20px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+            font-weight: bold;
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards, shake 0.3s ease;
+        }
+
+        .success-message {
+            color: #23d160;
+            background-color: #e9f9ee;
+            border: 1px solid #23d160;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Animation */
+
+        /* Di chuyển form Đăng nhập sang phải khi kích hoạt panel */
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        /* Di chuyển lớp phủ sang trái */
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        /* Hiện form Đăng ký */
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @@keyframes show {
+            0%, 49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+
+            50%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        /* Hiệu ứng rung nhẹ */
+        @@keyframes shake {
+            0%
+
+        {
+            transform: translateX(0);
+        }
+
+        20% {
+            transform: translateX(-5px);
+        }
+
+        40% {
+            transform: translateX(5px);
+        }
+
+        60% {
+            transform: translateX(-5px);
+        }
+
+        80% {
+            transform: translateX(5px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+
+        }
+
+        /* Di chuyển lớp phủ */
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        /* Di chuyển panel lớp phủ */
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .container {
+                width: 100%;
+                min-height: 100vh;
+                border-radius: 0;
+            }
+
+            .header-title {
+                display: none; /* Ẩn tiêu đề lớn trên mobile để gọn hơn */
+            }
+
+            form {
+                padding: 0 25px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <h2 class="header-title">HỆ THỐNG QUẢN LÝ THƯ VIỆN VANH VANH</h2>
+    <div class="container" id="container">
+        <!-- FORM ĐĂNG KÝ -->
+        <div class="form-container sign-up-container">
+            <form action="/Account/Register" method="post">
+                <h1>Tạo tài khoản</h1>
+                <div class="input-container">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="Email" placeholder="Email" required value="@ViewBag.EmailValue" />
+                </div>
+                <div class="input-container">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="text" name="PhoneNumber" placeholder="Số điện thoại" required value="@ViewBag.PhoneValue" />
+                </div>
+                <div class="input-container">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="Password" placeholder="Mật khẩu" required />
+                </div>
+                <div class="input-container">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="ConfirmPassword" placeholder="Nhập lại mật khẩu" required />
+                </div>
+                <button type="submit">Đăng Ký</button>
+
+                <!-- Hiển thị lỗi đăng ký (chỉ khi có lỗi từ form đăng ký) -->
+                @if (ViewBag.Error != null && ViewBag.IsSignUpError == true)
+                {
+                    <div class="alert-danger">
+                        <i class="fa-solid fa-exclamation-circle"></i> @ViewBag.Error
+                    </div>
+                }
+            </form>
+        </div>
+
+        <!-- FORM ĐĂNG NHẬP -->
+        <div class="form-container sign-in-container">
+            <!-- Thay đổi action trỏ đến Action Đăng nhập trong Controller của bạn -->
+            <form action="/Account/Login" method="post">
+                <h1>Đăng Nhập</h1>
+                <div class="input-container">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" name="Username" placeholder="Nhập email hoặc số điện thoại" required />
+                </div>
+                <div class="input-container">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" name="Password" placeholder="Mật khẩu" required />
+                </div> <br />
+@*                 <a href="#">Quên mật khẩu?</a> *@
+                <button type="submit">Đăng Nhập</button> <br />
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert-danger">
+                        <i class="fa fa-exclamation-circle"></i> @ViewBag.Error
+                    </div>
+                }
+                <!-- Hiển thị thông báo đăng ký thành công -->
+                @if (ViewBag.Success != null)
+                {
+                    <div class="success-message">@ViewBag.Success</div>
+                }
+            </form>
+        </div>
+
+        <!-- LỚP PHỦ (OVERLAY) -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <!-- Panel bên trái -->
+                <div class="overlay-panel overlay-left">
+                    <h1>Chào mừng trở lại!</h1>
+                    <p>Vui lòng đăng nhập để kết nối với kho tàng tri thức</p>
+                    <button class="ghost" id="signIn">Đăng Nhập</button>
+                </div>
+                <!-- Panel bên phải -->
+                <div class="overlay-panel overlay-right">
+                    <h1>Xin chào!</h1>
+                    <p>Nhập thông tin cá nhân của bạn và bắt đầu với hành trình mở rộng tri thức</p>
+                    <button class="ghost" id="signUp">Đăng Ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        function hideError() {
+            // Lấy tất cả các thông báo lỗi và ẩn chúng
+            document.querySelectorAll('.alert-danger').forEach(el => el.style.display = 'none');
+        }
+
+         if(signUpButton) {
+              signUpButton.addEventListener('click', () => {
+                 container.classList.add("right-panel-active");
+             });
+         }
+
+        if(signInButton) {
+             signInButton.addEventListener('click', () => {
+                 container.classList.remove("right-panel-active");
+             });
+        }
+
+         window.onload = function() {
+             var isSignUpError = @(ViewBag.IsSignUpError != null && ViewBag.IsSignUpError ? "true" : "false");
+
+             if (isSignUpError) {
+                 if(container) container.classList.add("right-panel-active");
+             }
+         };
+    </script>
+</body>
+</html>
+

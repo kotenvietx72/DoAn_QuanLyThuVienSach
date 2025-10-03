@@ -1,0 +1,233 @@
+﻿@model X.PagedList.IPagedList<DoAn_QuanLyThuVienSach.Models.Book>
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+
+@{
+    ViewBag.Title = "Trang Chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Thư Viện Vanh Vanh</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #5D9CEC; /* Blue */
+            --secondary-color: #4A4A4A; /* Dark Gray */
+            --background-color: #F4F4F4; /* Light Gray */
+            --card-bg-color: #FFFFFF;
+            --text-color: #333333;
+            --header-height: 70px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        /* --- Main Content --- */
+        main {
+            padding-top: 10px; /* Để nội dung không bị header che */
+        }
+
+        /* --- Hero Banner --- */
+        .hero-banner {
+            background: linear-gradient(rgba(93, 156, 236, 0.8), rgba(93, 156, 236, 0.8)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+            .hero-banner h1 {
+                font-size: 3rem;
+                margin-bottom: 10px;
+            }
+
+            .hero-banner p {
+                font-size: 1.2rem;
+                font-weight: 300;
+            }
+
+        /* --- Book Section --- */
+        .book-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background-color: var(--primary-color);
+                border-radius: 2px;
+            }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .book-card {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* --- THAY ĐỔI 1: Biến thẻ sách thành flex container --- */
+            display: flex;
+            flex-direction: column;
+        }
+
+            .book-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+
+        .book-cover img {
+            width: 100%;
+            height: 330px;
+            object-fit: cover;
+        }
+
+        .book-info {
+            padding: 15px;
+            /* --- THAY ĐỔI 2: Biến khu vực thông tin thành flex container --- */
+            display: flex;
+            flex-direction: column; /* Sắp xếp các mục theo chiều dọc */
+            flex-grow: 1; /* Cho phép khu vực này giãn ra để lấp đầy không gian trống */
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            color: var(--text-color);
+            /* Đặt chiều cao tối thiểu để chứa được 2 dòng, giúp căn chỉnh tốt hơn */
+            min-height: 44px;
+        }
+
+        .book-author {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .btn-details {
+            /* --- THAY ĐỔI: Chuyển sang block để nút rộng ra --- */
+            display: block;
+            
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            /* Tự động đẩy nút xuống đáy */
+            margin-top: auto;
+        }
+
+            .btn-details:hover {
+                background-color: #3B82F6;
+            }
+
+        .pagination li.active a {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <!-- Hero banner -->
+        <section class="hero-banner">
+            <h1>Chào mừng đến với Thư Viện Tri Thức</h1>
+            <p>Khám phá kho tàng kiến thức vô tận và tìm kiếm cuốn sách yêu thích của bạn.</p>
+        </section>
+
+        <!-- Danh sách sách -->
+        <section class="book-section">
+            <h2 class="section-title">Khám Phá Sách</h2>
+            <div class="book-grid">
+                @foreach (var book in Model)
+                {
+                    <div class="book-card">
+                        <div class="book-cover">
+                            <img src="@book.CoverImage" alt="Bìa sách @book.Title"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/300x450/cccccc/ffffff?text=Image+Not+Found';">
+                        </div>
+                        <div class="book-info">
+                            <h3 class="book-title">@book.Title</h3>
+                            <p class="book-author">
+                                @string.Join(", ", book.BookAuthors.Select(ba => ba.Author.Name))
+                            </p>
+                            <a href="@Url.Action("Details", "Book", new { id = book.BookId })" class="btn-details">Xem Chi Tiết</a>
+                        </div>
+                    </div>
+                }
+            </div> <br /><br />
+            <div class="pagination-container text-center mt-4">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+                                new PagedListRenderOptions
+                                {
+                                    LiElementClasses = new[] { "page-item" },
+                                    PageClasses = new[] { "page-link" },
+                                    UlElementClasses = new[] { "pagination", "justify-content-center" }
+                                })
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) {
+                const trigger = userMenu.querySelector('.user-trigger');
+                const dropdown = document.getElementById('dropdownContent');
+
+                trigger.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    dropdown.classList.toggle('show');
+                    userMenu.classList.toggle('open');
+                });
+
+                // Đóng dropdown khi click ra ngoài
+                window.addEventListener('click', function (e) {
+                    if (!userMenu.contains(e.target)) {
+                        if (dropdown.classList.contains('show')) {
+                            dropdown.classList.remove('show');
+                            userMenu.classList.remove('open');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

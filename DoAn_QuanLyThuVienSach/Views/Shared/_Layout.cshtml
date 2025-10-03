@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Quản lí thư viện Vanh Vanh</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Cau2_GiaoVien.styles.css" asp-append-version="true" />
+
+    <style>
+        /* --- Header --- */
+        .main-header {
+            background-color: var(--card-bg-color);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .main-nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+            .main-nav a:hover {
+                color: var(--primary-color);
+            }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-right: 20px;
+        }
+
+            .search-bar input {
+                border: 1px solid #ddd;
+                border-radius: 20px;
+                padding: 8px 15px 8px 40px;
+                outline: none;
+                transition: border-color 0.3s ease;
+                width: 250px;
+            }
+
+                .search-bar input:focus {
+                    border-color: var(--primary-color);
+                }
+
+            .search-bar i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #aaa;
+            }
+
+        .auth-links a {
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-links .login {
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            margin-right: 10px;
+        }
+
+            .auth-links .login:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+        /* --- PHẦN CSS MỚI CHO MENU NGƯỜI DÙNG --- */
+        .user-menu {
+            position: relative;
+            margin-left: 20px;
+        }
+
+        .user-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+            .user-trigger .username {
+                margin-right: 8px;
+            }
+
+            .user-trigger .fa-chevron-down {
+                font-size: 0.8em;
+                transition: transform 0.3s ease;
+            }
+
+        .user-menu.open .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 150%;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 5px 0;
+        }
+
+            .dropdown-content.show {
+                display: block;
+            }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                font-size: 0.95rem;
+                transition: background-color 0.2s ease;
+            }
+
+                .dropdown-content a i {
+                    margin-right: 10px;
+                    width: 16px;
+                    text-align: center;
+                }
+
+                .dropdown-content a:hover {
+                    background-color: #f1f1f1;
+                }
+
+        .dropdown-divider {
+            height: 1px;
+            margin: 5px 0;
+            background-color: #eee;
+        }
+
+        .library-footer {
+            background-color: #2c3e50;
+            color: #ddd;
+            padding: 40px 0 20px 0;
+            font-size: 14px;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .footer-col h3,
+        .footer-col h4 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .footer-logo {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #5D9CEC;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            .footer-col ul li {
+                margin-bottom: 10px;
+            }
+
+                .footer-col ul li a {
+                    color: #bbb;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                }
+
+                    .footer-col ul li a:hover {
+                        color: #5D9CEC;
+                    }
+
+                .footer-col ul li i {
+                    margin-right: 8px;
+                    color: #5D9CEC;
+                }
+
+        .social-links a {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 16px;
+            color: #bbb;
+            transition: color 0.3s ease;
+        }
+
+            .social-links a:hover {
+                color: #5D9CEC;
+            }
+
+        .footer-bottom {
+            border-top: 1px solid #444;
+            margin-top: 20px;
+            padding-top: 15px;
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <a href="/" class="logo"><i class="fas fa-book-open"></i> Thư Viện Vanh Vanh</a>
+
+        <!-- THANH ĐIỀU HƯỚNG -->
+        <nav class="main-nav">
+            <a href="/TrangChu/Index" class="active">Trang Chủ</a>
+            <a href="#">Thể Loại</a>
+            <a href="#">Lịch Sử Mượn Sách</a>
+            <a href="#">Trả Sách</a>
+            <a href="#">Giới Thiệu</a>
+        </nav>
+
+        <div class="header-actions">
+            <!-- LOGIC HIỂN THỊ ĐĂNG NHẬP / MENU NGƯỜI DÙNG -->
+            @if (ViewBag.Username != null)
+            {
+                <div class="user-menu" id="userMenu">
+                    <div class="user-trigger">
+                        <span class="username">Xin chào, @ViewBag.Username</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-content" id="dropdownContent">
+                        <a href="/TrangChu/Profile"><i class="fas fa-user-circle"></i> Thông tin tài khoản</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="auth-links">
+                    <a href="/Account/Login" class="login">Đăng Nhập</a>
+                </div>
+            }
+        </div>
+    </header>
+
+    <div class="container" style="margin-top:80px">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="library-footer">
+        <div class="footer-container">
+            <!-- Cột 1: Logo + giới thiệu -->
+            <div class="footer-col">
+                <h3 class="footer-logo"><i class="fas fa-book-open"></i> Thư Viện Tri Thức</h3>
+                <p>Hệ thống quản lý thư viện hiện đại, hỗ trợ mượn – trả sách, tra cứu nhanh chóng và chính xác.</p>
+            </div>
+
+            <!-- Cột 2: Liên kết nhanh -->
+            <div class="footer-col">
+                <h4>Liên kết nhanh</h4>
+                <ul>
+                    <li><a href="@Url.Action("Index", "TrangChu")">Trang Chủ</a></li>
+                    <li><a href="#">Thể Loại</a></li>
+                    <li><a href="#">Lịch Sử Mượn Sách</a></li>
+                    <li><a href="#">Trả Sách</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 3: Thông tin liên hệ -->
+            <div class="footer-col">
+                <h4>Liên hệ</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i>Phù Đổng, Hà Nội</li>
+                    <li><i class="fas fa-phone"></i>0971 975 053</li>
+                    <li><i class="fas fa-envelope"></i>nvanh.dhti16a1cl@sv.uneti.edu.vn</li>
+                </ul>
+            </div>
+
+            <!-- Cột 4: Mạng xã hội -->
+            <div class="footer-col">
+                <h4>Kết nối</h4>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/viet.anh.313430"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.tiktok.com/@@viet_anh2506"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@@VietAnh-rs4cs"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/vietanh_2564/"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bản quyền -->
+        <div class="footer-bottom">
+            <p>&copy; @DateTime.Now.Year Thư viện Vanh Vanh. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Xác nhận -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận đăng xuất</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn đăng xuất không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                    <a href="@Url.Action("Logout", "TrangChu")" class="btn btn-danger">Có</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
