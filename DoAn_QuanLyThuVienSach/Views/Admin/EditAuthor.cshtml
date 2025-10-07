@@ -1,0 +1,28 @@
+﻿@model DoAn_QuanLyThuVienSach.Models.Author
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Chỉnh sửa tác giả";
+}
+
+<div class="bg-white p-6 rounded-xl shadow-lg">
+    <form method="post" asp-action="EditAuthor">
+        <input type="hidden" asp-for="AuthorId" />
+        <div class="space-y-4">
+            <div>
+                <label asp-for="Name" class="block text-sm font-medium text-gray-700">Tên Tác giả</label>
+                <input asp-for="Name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="Bio" class="block text-sm font-medium text-gray-700">Tiểu sử</label>
+                <input asp-for="Bio" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="Bio" class="text-red-500 text-sm"></span>
+            </div>
+        </div>
+
+        <div class="pt-4 mt-4 flex items-center space-x-4">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md">Cập nhật</button>
+            <a asp-action="Index" asp-route-module="author" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md">Hủy</a>
+        </div>
+    </form>
+</div>

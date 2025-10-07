@@ -1,0 +1,109 @@
+﻿@model DoAn_QuanLyThuVienSach.ViewModel.BookViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = Model.Book.BookId == 0 ? "Thêm sách mới" : "Chỉnh sửa sách";
+}
+
+<style>
+    /* Style chung cho Select2 container */
+    .select2-container .select2-selection {
+        border: 1px solid #d1d5db; /* Giống border-gray-300 của Tailwind */
+        border-radius: 0.375rem; /* Giống rounded-md của Tailwind */
+        height: 42px; /* Đồng bộ chiều cao */
+        padding: 0.25rem 0;
+    }
+
+    /* Style cho ô select đơn (Nhà xuất bản) */
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 40px;
+        padding-left: 0.75rem;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 40px;
+    }
+
+    /* Style cho ô select đa lựa chọn (Thể loại) */
+    .select2-container--default .select2-selection--multiple {
+        height: auto; /* Cho phép giãn ra khi có nhiều tag */
+        min-height: 42px;
+    }
+
+    /* Hiệu ứng khi được focus (viền xanh) */
+    .select2-container--default.select2-container--focus .select2-selection {
+        border-color: #4f46e5; /* Màu primary của bạn */
+        box-shadow: 0 0 0 1px #4f46e5;
+    }
+</style>
+
+<div class="bg-white p-6 rounded-xl shadow-lg">
+    <form method="post" asp-action="UpsertBook">
+        <input type="hidden" asp-for="Book.BookId" />
+        <input type="hidden" asp-for="Book.CoverImage" />
+
+        <div class="space-y-4">
+            <div>
+                <label asp-for="Book.Title" class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                <input asp-for="Book.Title" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="Book.Title" class="text-red-500 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="Book.PublicationYear" class="block text-sm font-medium text-gray-700">Năm xuất bản</label>
+                <input asp-for="Book.PublicationYear" type="number" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+            </div>
+            <div>
+                <label asp-for="Book.TotalCopies" class="block text-sm font-medium text-gray-700">Tổng số bản</label>
+                <input asp-for="Book.TotalCopies" type="number" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+            </div>
+            <div>
+                <label asp-for="CoverImageFile" class="block text-sm font-medium text-gray-700">Ảnh bìa</label>
+                <input asp-for="CoverImageFile" type="file" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+            </div>
+            <div>
+                <label asp-for="Book.Description" class="block text-sm font-medium text-gray-700">Mô tả</label>
+                <textarea asp-for="Book.Description" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+            </div>
+            <div>
+                <label asp-for="PublisherName" class="block text-sm font-medium text-gray-700">Nhà xuất bản</label>
+                <select id="publisherSelect" asp-for="PublisherName" asp-items="@Model.AllPublishers" class="mt-1 block w-full">
+                    <option value="">-- Chọn hoặc nhập NXB mới --</option>
+                </select>
+                <span asp-validation-for="PublisherName" class="text-red-500 text-sm"></span>
+            </div>
+
+            <div>
+                <label asp-for="CategoryNames" class="block text-sm font-medium text-gray-700">Thể loại</label>
+                <select id="categorySelect" asp-for="CategoryNames" asp-items="@Model.AllCategories" class="mt-1 block w-full" multiple="multiple">
+                    <option value="">-- Chọn hoặc nhập thể loại mới --</option>
+                </select>
+                <span asp-validation-for="CategoryNames" class="text-red-500 text-sm"></span>
+            </div>
+        </div>
+
+
+        <div class="pt-4 mt-4 flex items-center space-x-4">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md">Lưu</button>
+            <a asp-action="Index" asp-route-module="book" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md">Hủy</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Cấu hình cho ô chọn Nhà xuất bản
+            $('#publisherSelect').select2({
+                tags: true, // Cho phép người dùng nhập giá trị mới
+                placeholder: 'Chọn hoặc nhập NXB mới',
+                tokenSeparators: [',', ' ']
+            });
+
+            // Cấu hình cho ô chọn Thể loại (chọn nhiều)
+            $('#categorySelect').select2({
+                tags: true, // Cho phép người dùng nhập giá trị mới
+                placeholder: 'Chọn hoặc nhập các thể loại mới',
+                tokenSeparators: [',']
+            });
+        });
+    </script>
+}

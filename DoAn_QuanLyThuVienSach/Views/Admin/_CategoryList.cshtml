@@ -6,6 +6,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên Thể Loại</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nhóm Thể Loại</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mô tả</th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Thao tác</th>
         </tr>
     </thead>
@@ -16,12 +17,15 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.CategoryId</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.Name</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.CategoryGroup?.Name</td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                    <button class="text-indigo-600 hover:text-indigo-900" title="Sửa"><i class="fas fa-edit"></i></button>
-
-                    @* Bạn cần tạo Action DeleteCategory trong AdminController *@
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.Description</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                    <a asp-action="UpsertCategory" asp-route-id="@item.CategoryId" class="text-indigo-600 hover:text-indigo-900" title="Sửa">
+                        <i class="fas fa-edit"></i> Sửa
+                    </a>
                     <form asp-action="DeleteCategory" asp-route-id="@item.CategoryId" method="post" class="inline-block delete-form">
-                        <button type="submit" class="text-red-600 hover:text-red-900" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                        <button type="submit" class="text-red-600 hover:text-red-900" title="Xóa">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </button>
                     </form>
                 </td>
             </tr>

@@ -1,0 +1,30 @@
+﻿@model DoAn_QuanLyThuVienSach.Models.Category
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = Model.CategoryId == 0 ? "Thêm thể loại mới" : "Chỉnh sửa thể loại";
+}
+
+<div class="bg-white p-6 rounded-xl shadow-lg">
+    <form method="post" asp-action="UpsertCategory">
+        <input type="hidden" asp-for="CategoryId" />
+
+        <div class="space-y-4">
+            <div>
+                <label asp-for="Name" class="block text-sm font-medium text-gray-700">Tên Thể loại</label>
+                <input asp-for="Name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="Description" class="block text-sm font-medium text-gray-700">Mô tả</label>
+                <textarea asp-for="Description" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+            </div>
+        </div>
+
+        <div class="pt-4 mt-4 flex items-center space-x-4">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md">
+                @(Model.CategoryId == 0 ? "Thêm mới" : "Cập nhật")
+            </button>
+            <a asp-action="Index" asp-route-module="category" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md">Hủy</a>
+        </div>
+    </form>
+</div>

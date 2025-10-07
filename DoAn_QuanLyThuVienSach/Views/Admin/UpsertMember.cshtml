@@ -1,0 +1,51 @@
+﻿@model DoAn_QuanLyThuVienSach.ViewModel.MemberViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = Model.Member.MemberId == 0 ? "Thêm thành viên mới" : "Chỉnh sửa thành viên";
+}
+
+<div class="bg-white p-6 rounded-xl shadow-lg">
+    <form method="post" asp-action="UpsertMember">
+        <input type="hidden" asp-for="Member.MemberId" />
+        <input type="hidden" asp-for="Member.DateCreated" />
+        <div class="space-y-4">
+            <div>
+                <label asp-for="Member.Name" class="block text-sm font-medium text-gray-700">Họ và Tên</label>
+                <input asp-for="Member.Name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="Member.Name" class="text-red-500 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="Member.Email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input asp-for="Member.Email" type="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="Member.Email" class="text-red-500 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="Member.PhoneNumber" class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+                <input asp-for="Member.PhoneNumber" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+            </div>
+            <div>
+                <label asp--for="Member.Address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+                <input asp-for="Member.Address" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+            </div>
+            <div>
+                <label asp-for="Member.Password" class="block text-sm font-medium text-gray-700">Mật khẩu</label>
+                <input asp-for="Member.Password" type="password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="Để trống nếu không muốn thay đổi" />
+                <span asp-validation-for="Member.Password" class="text-red-500 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="Member.RoleId" class="block text-sm font-medium text-gray-700">Quyền</label>
+                <select asp-for="Member.RoleId" asp-items="@Model.RoleList" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    <option value="">-- Chọn quyền --</option>
+                </select>
+                <span asp-validation-for="Member.RoleId" class="text-red-500 text-sm"></span>
+            </div>
+        </div>
+
+        <div class="pt-4 mt-4 flex items-center space-x-4">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md">
+                @(Model.Member.MemberId == 0 ? "Thêm mới" : "Cập nhật")
+            </button>
+            <a asp-action="Index" asp-route-module="member" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md">Hủy</a>
+        </div>
+    </form>
+</div>

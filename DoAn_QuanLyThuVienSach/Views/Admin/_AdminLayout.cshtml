@@ -1,14 +1,14 @@
-﻿@using DoAn_QuanLyThuVienSach.ViewModel
-@model AdminDashboardVM
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Admin Dashboard</title>
-    <!-- Tải Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -29,38 +29,43 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- Sidebar -->
     <aside id="sidebar" class="w-64 bg-gray-800 text-white flex-shrink-0 flex flex-col overflow-y-auto">
         <div class="p-6 text-xl font-bold text-indigo-400 border-b border-gray-700">
             <i class="fas fa-tools mr-2"></i> ADMIN DASHBOARD
         </div>
 
         <nav class="flex-grow p-4 space-y-2">
-            <!-- Helper function for active link -->
             @{
-                string IsActive(string module) => Model.CurrentModule == module.ToLower() ? "active" : "";
+                // Helper function để làm nổi bật menu đang được chọn
+                string currentModule = ViewData["CurrentModule"] as string ?? "book";
+                string IsActive(string module) => currentModule == module.ToLower() ? "active" : "";
             }
 
-            <div class="text-xs font-semibold uppercase text-gray-400 pt-4 pb-1">Tra Cứu</div>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="author" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("author")">
-                <i class="fas fa-feather-alt mr-3"></i> Quản lý Tác giả
-            </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="publisher" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("publisher")">
-                <i class="fas fa-building mr-3"></i> Quản lý NXB
-            </a>
+            <div class="text-xs font-semibold uppercase text-gray-400 pt-4 pb-1">Quản lý</div>
 
-            <div class="text-xs font-semibold uppercase text-gray-400 pt-4 pb-1">Quản lý (CRUD)</div>
             <a asp-controller="Admin" asp-action="Index" asp-route-module="book" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("book")">
-                <i class="fas fa-book mr-3"></i> Quản lý Sách
+                <i class="fas fa-book mr-3 w-5 text-center"></i> Quản lý Sách
             </a>
             <a asp-controller="Admin" asp-action="Index" asp-route-module="category" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("category")">
-                <i class="fas fa-tags mr-3"></i> Quản lý Thể loại
-            </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="loan" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("loan")">
-                <i class="fas fa-hand-holding-usd mr-3"></i> Quản lý Mượn
+                <i class="fas fa-tags mr-3 w-5 text-center"></i> Quản lý Thể loại
             </a>
             <a asp-controller="Admin" asp-action="Index" asp-route-module="member" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("member")">
-                <i class="fas fa-users mr-3"></i> Quản lý Tài khoản
+                <i class="fas fa-users mr-3 w-5 text-center"></i> Quản lý Thành viên
+            </a>
+            <a asp-controller="Admin" asp-action="Index" asp-route-module="loan" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("loan")">
+                <i class="fas fa-hand-holding-usd mr-3 w-5 text-center"></i> Quản lý Mượn
+            </a>
+            <a asp-controller="Admin" asp-action="Index" asp-route-module="author" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("author")">
+                <i class="fas fa-feather-alt mr-3 w-5 text-center"></i> Quản lý Tác giả
+            </a>
+            <a asp-controller="Admin" asp-action="Index" asp-route-module="publisher" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("publisher")">
+                <i class="fas fa-building mr-3 w-5 text-center"></i> Quản lý NXB
+            </a>
+
+            <div class="border-t border-gray-700 my-4"></div>
+
+            <a asp-controller="TrangChu" asp-action="Index" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg">
+                <i class="fas fa-home mr-3 w-5 text-center"></i> Quay về trang chủ
             </a>
         </nav>
 
@@ -69,23 +74,32 @@
         </div>
     </aside>
 
-    <!-- Main Content Area -->
     <div class="content-area flex-grow overflow-y-auto">
-        <!-- Header -->
         <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-10">
             <h1 class="text-2xl font-semibold text-gray-800">@ViewData["Title"]</h1>
-            <button id="addNewButton" class="bg-primary hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md flex items-center transition duration-200">
-                <i class="fas fa-plus mr-2"></i> Thêm Mới
-            </button>
+
+            @{
+                // Logic để tạo link "Thêm Mới" động
+                string upsertAction = "Upsert" + char.ToUpper(currentModule[0]) + currentModule.Substring(1);
+            }
+
+            @* Nút "Thêm Mới" sẽ chỉ hiển thị cho các module có chức năng Thêm Mới *@
+            @if (new[] { "book", "category", "member" }.Contains(currentModule))
+            {
+                <a asp-controller="Admin" asp-action="@upsertAction" class="bg-primary hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md flex items-center transition duration-200">
+                    <i class="fas fa-plus mr-2"></i> Thêm Mới
+                </a>
+            }
         </header>
 
-        <!-- Module Content will be injected here -->
         <main class="p-6">
             @RenderBody()
         </main>
     </div>
 
-    <!-- Modal for Add/Edit will be added here or in the specific module view -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
