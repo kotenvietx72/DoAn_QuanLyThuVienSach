@@ -1,0 +1,98 @@
+﻿@model DoAn_QuanLyThuVienSach.ViewModel.AdminDashboardVM
+@{
+    Layout = "_AdminLayout";
+    var partialViewName = ViewData["PartialViewName"] as string;
+    var moduleData = ViewData["ModuleData"];
+}
+
+<div class="bg-white p-6 rounded-xl shadow-lg">
+
+    <!-- Search Bar -->
+    <div class="mb-6">
+        <form asp-action="Index" method="get" class="flex items-center w-full max-w-lg">
+            @* Input ẩn để luôn gửi kèm module hiện tại *@
+            <input type="hidden" name="module" value="@Model.CurrentModule" />
+
+            <div class="relative w-full">
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Tìm kiếm..." class="p-3 w-full border border-gray-300 rounded-l-lg focus:ring-primary focus:border-primary">
+                @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"] as string))
+                {
+                    <a asp-action="Index" asp-route-module="@Model.CurrentModule" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600" title="Xóa bộ lọc">
+                        <i class="fas fa-times-circle"></i>
+                    </a>
+                }
+            </div>
+            <button type="submit" class="bg-primary text-white p-3 rounded-r-lg hover:bg-indigo-600 transition duration-150">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+
+
+    <!-- Data Table -->
+    <div class="overflow-x-auto">
+        @if (!string.IsNullOrEmpty(partialViewName))
+        {
+            @await Html.PartialAsync(partialViewName, moduleData)
+        }
+        else
+        {
+            <p>Module không hợp lệ.</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- B. CHỨC NĂNG XÓA (VỚI SWEETALERT2) ---
+            const deleteForms = document.querySelectorAll('.delete-form');
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Ngăn form gửi đi ngay lập tức
+
+                    Swal.fire({
+                        title: 'Bạn có chắc chắn muốn xóa?',
+                        text: "Hành động này không thể hoàn tác!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Vâng, xóa nó!',
+                        cancelButtonText: 'Hủy'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Nếu xác nhận, gửi form đi
+                        }
+                    });
+                });
+            });
+        });
+
+        // Hiển thị thông báo thành công/lỗi từ TempData
+        @if (TempData["SuccessMessage"] != null)
+        {
+                <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: @Html.Raw(Json.Serialize(TempData["SuccessMessage"])),
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                </text>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+                <text>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: @Html.Raw(Json.Serialize(TempData["ErrorMessage"]))
+                });
+                </text>
+        }
+    </script>
+}

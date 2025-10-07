@@ -1,0 +1,205 @@
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@model IPagedList<DoAn_QuanLyThuVienSach.Models.Book>
+
+@{
+    ViewData["Title"] = $"Sách thuộc nhóm: {ViewBag.GroupName}";
+}
+
+<style>
+    /* CSS Tùy chỉnh làm đẹp */
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+        padding: 20px 0;
+    }
+
+    .book-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-align: center;
+        background-color: #fff;
+    }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding-bottom: 15px;
+        }
+
+    .book-cover {
+        height: 250px;
+        margin-bottom: 15px;
+        border-radius: 8px 8px 0 0;
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+        .book-cover img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+    .book-info {
+        padding: 0 10px;
+    }
+
+        .book-info h5 {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #1e7e34; /* Màu xanh lá cây */
+            margin-bottom: 5px;
+            height: 44px; /* Giới hạn 2 dòng tiêu đề */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .book-info p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+    .page-header {
+        border-bottom: 2px solid #1e7e34;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+
+        .page-header h1 {
+            font-weight: 400;
+            color: #343a40;
+        }
+
+    .pagination-container ul {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        border-radius: 0.25rem;
+        margin: 0;
+    }
+
+        /* 2. Style cho li (giống Bootstrap .page-item) */
+        .pagination-container ul li {
+            margin: 0 1px;
+        }
+
+            /* 3. Style cho a và span (giống Bootstrap .page-link) */
+            .pagination-container ul li a,
+            .pagination-container ul li span {
+                position: relative;
+                display: block;
+                padding: 0.5rem 0.75rem;
+                line-height: 1.25;
+                color: #007bff; /* Màu chữ chính */
+                background-color: #fff;
+                border: 1px solid #dee2e6; /* Màu viền */
+                text-decoration: none;
+                transition: all 0.2s;
+                border-radius: 0.25rem;
+            }
+
+            /* Xử lý bo góc cho item đầu và cuối */
+            .pagination-container ul li:first-child a,
+            .pagination-container ul li:first-child span {
+                border-top-left-radius: 0.25rem;
+                border-bottom-left-radius: 0.25rem;
+            }
+
+            .pagination-container ul li:last-child a,
+            .pagination-container ul li:last-child span {
+                border-top-right-radius: 0.25rem;
+                border-bottom-right-radius: 0.25rem;
+            }
+
+            /* 4. Style cho trang đang chọn (active) */
+            .pagination-container ul li.active a,
+            .pagination-container ul li.active span {
+                z-index: 1;
+                color: #fff;
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+
+            /* 5. Style khi hover */
+            .pagination-container ul li a:hover {
+                z-index: 2;
+                color: #0056b3;
+                background-color: #e9ecef;
+                border-color: #dee2e6;
+            }
+
+            /* 6. Style cho nút bị vô hiệu hóa (disabled) */
+            .pagination-container ul li.disabled span {
+                color: #6c757d;
+                pointer-events: none;
+                background-color: #fff;
+                border-color: #dee2e6;
+            }
+</style>
+<br />
+<div class="page-header">
+    <h1 class="display-6">
+        <i class="fas fa-cubes text-success"></i> Sách thuộc nhóm: @ViewBag.GroupName
+    </h1>
+    <p class="text-muted">Đã tìm thấy @ViewBag.TotalBooks cuốn sách</p>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="books-grid">
+        @foreach (var book in Model)
+        {
+            // Lấy tên tác giả
+            var authors = book.BookAuthors.Select(ba => ba.Author.Name).ToList();
+            var authorsString = authors.Count > 0 ? string.Join(", ", authors) : "Đang cập nhật";
+
+            <div class="book-card">
+                <a asp-controller="TrangChu" asp-action="Detail" asp-route-id="@book.BookId">
+                    <div class="book-cover">
+                        @if (!string.IsNullOrEmpty(book.CoverImage))
+                        {
+                            <img src="@Url.Content(book.CoverImage)" alt="@book.Title">
+                        }
+                        else
+                        {
+                            <img src="~/images/default-cover.jpg" alt="No Cover" style="width: 100px;">
+                        }
+                    </div>
+                    <div class="book-info">
+                        <h5>@book.Title</h5>
+                        <p class="author">@authorsString</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex justify-content-center mt-5">
+        <div class="pagination-container">
+            @Html.PagedListPager(Model, page => Url.Action("GroupDetail", new { groupId = ViewBag.GroupId, page = page }))
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center" role="alert">
+        <i class="fas fa-book-reader"></i> Hiện chưa có cuốn sách nào được gán vào nhóm **@ViewBag.GroupName** này.
+    </div>
+}

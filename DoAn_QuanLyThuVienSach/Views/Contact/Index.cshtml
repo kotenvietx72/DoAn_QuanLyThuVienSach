@@ -10,12 +10,24 @@
 <br />
 <div class="contact-page-content">
 
-    @if (!string.IsNullOrEmpty(ViewBag.Message))
-    {
-        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-            <strong>Thành công!</strong> @ViewBag.Message
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    @section Scripts {
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <script type="text/javascript">
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: @Html.Raw(Json.Serialize(TempData["SuccessMessage"]))
+                });
+            </script>
+        }
     }
 
     <section class="info-banner text-center py-5">

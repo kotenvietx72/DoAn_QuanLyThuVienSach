@@ -26,9 +26,9 @@ namespace DoAn_QuanLyThuVienSach.Controllers
                 return View();
             }
 
-            // Tìm user theo email hoặc số điện thoại
             var user = db.Members
-                .FirstOrDefault(m => m.Email == Username || m.PhoneNumber == Username);
+               .Include(m => m.Role)
+               .FirstOrDefault(m => m.Email == Username || m.PhoneNumber == Username);
 
             if (user == null)
             {
@@ -43,7 +43,21 @@ namespace DoAn_QuanLyThuVienSach.Controllers
             }
 
             HttpContext.Session.SetString("Username", user.Name);
-            return RedirectToAction("Index", "TrangChu"); // Chuyển về trang chủ
+            HttpContext.Session.SetString("MemberId", user.MemberId.ToString());
+
+            string userRole = user.Role?.RoleName ?? "Member";
+            HttpContext.Session.SetString("Role", userRole);
+
+            if (userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                // Chuyển hướng đến trang quản trị
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                // Chuyển hướng đến trang khách hàng
+                return RedirectToAction("Index", "TrangChu");
+            }
         }
 
         [HttpPost]
@@ -52,8 +66,7 @@ namespace DoAn_QuanLyThuVienSach.Controllers
             // Hàm kiểm tra lỗi
             Action<string> setSignUpError = (errorMessage) => {
                 ViewBag.Error = errorMessage;
-                ViewBag.IsSignUpError = true; // Cờ để JS biết và mở lại tab đăng ký
-                                              // Lưu lại giá trị đã nhập để không phải nhập lại
+                ViewBag.IsSignUpError = true;
                 ViewBag.EmailValue = Email;
                 ViewBag.PhoneValue = PhoneNumber;
             };
@@ -70,22 +83,20 @@ namespace DoAn_QuanLyThuVienSach.Controllers
                 return View("Login");
             }
 
-            // Nếu không có lỗi, tiến hành tạo tài khoản mới
             var member = new Member
             {
                 Name = string.IsNullOrEmpty(Email) ? "User" : Email.Split('@')[0],
                 Email = Email,
                 PhoneNumber = PhoneNumber,
-                Password = Password, // Lưu ý: Nên mã hóa mật khẩu trước khi lưu
+                Password = Password,
                 Address = "",
                 DateCreated = DateTime.Now,
-                RoleId = 2 // mặc định là Member
+                RoleId = 2
             };
 
             db.Members.Add(member);
             db.SaveChanges();
 
-            // Đăng ký thành công, gửi thông báo và hiển thị tab đăng nhập
             ViewBag.Success = "Đăng ký thành công, bạn có thể đăng nhập.";
             return View("Login");
         }

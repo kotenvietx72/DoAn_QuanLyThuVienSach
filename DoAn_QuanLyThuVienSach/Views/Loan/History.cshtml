@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Loan>
+@{
+    ViewData["Title"] = "Lịch sử mượn sách";
+}
+<style>
+    .table-history {
+        width: 100%;
+        border-collapse: collapse; /* Gộp đường viền */
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        overflow: hidden; /* Bo góc cho cả bảng */
+    }
+
+        .table-history th, .table-history td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: middle; /* Quan trọng: Căn giữa nội dung theo chiều dọc */
+        }
+
+        .table-history th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .table-history tbody tr:hover {
+            background-color: #f1f3f5;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .table-history .book-cover-sm {
+            width: 60px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .table-history .book-title-link {
+            font-weight: 500;
+            color: #212529;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+            .table-history .book-title-link:hover {
+                color: #007bff; 
+                text-decoration: underline; 
+            }
+</style>
+<br />
+
+<h1>@ViewData["Title"]</h1>
+<table class="table-history">
+    <thead>
+        <tr>
+            <th>Bìa sách</th>
+            <th>Tên sách</th>
+            <th>Ngày mượn</th>
+            <th>Ngày hẹn trả</th>
+            <th>Tình trạng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @* Thêm class cho ảnh *@
+                    <img src="@item.Book.CoverImage" alt="@item.Book.Title" class="book-cover-sm" />
+                </td>
+                <td>
+                    @* Thêm class cho link tên sách *@
+                    <a asp-controller="TrangChu" asp-action="Detail" asp-route-id="@item.BookId" class="book-title-link">
+                        @item.Book.Title
+                    </a>
+                </td>
+                <td>@item.DateBorrowed.ToString("dd/MM/yyyy")</td>
+                <td>@item.DueDate.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @if (item.DateReturned != null)
+                    {
+                        <span class="badge bg-success">Đã trả</span>
+                    }
+                    else if (item.DueDate < DateTime.Now)
+                    {
+                        <span class="badge bg-danger">Quá hạn</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Đang mượn</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

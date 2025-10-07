@@ -30,7 +30,7 @@
             <div class="action-box mt-4">
                 @if (ViewBag.IsAvailable)
                 {
-                    <a asp-controller="MuonTra" asp-action="Muon" asp-route-bookId="@Model.BookId"
+                    <a asp-controller="Loan" asp-action="Create" asp-route-id="@Model.BookId"
                        class="btn btn-primary btn-lg btn-borrow">
                         <i class="fas fa-hand-holding-box"></i> Mượn Sách
                     </a>
@@ -71,7 +71,7 @@
                     </li>
                     <li>
                         <i class="fas fa-cubes"></i>
-                        Số lượng hiện có: <strong>@Model.TotalCopies</strong>
+                        Số lượng hiện có: <strong>@ViewBag.AvailableCopies</strong>
                     </li>
 
                     <li>

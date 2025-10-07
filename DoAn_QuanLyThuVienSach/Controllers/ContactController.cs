@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DoAn_QuanLyThuVienSach.Data;
+using DoAn_QuanLyThuVienSach.ViewModel;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DoAn_QuanLyThuVienSach.Controllers
 {
     public class ContactController : Controller
     {
+        private readonly DataContext db;
+
+        public ContactController() => db = new DataContext();
+
         public IActionResult Index()
         {
             var username = HttpContext.Session.GetString("Username");
@@ -17,8 +24,7 @@ namespace DoAn_QuanLyThuVienSach.Controllers
         [HttpPost]
         public IActionResult Send(string name, string email, string subject, string message)
         {
-            // Logic xử lý và gửi email
-            ViewBag.Message = "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.";
+            TempData["SuccessMessage"] = "Chúng tôi sẽ phản hồi lại trong thời gian sớm nhất!";
 
             var username = HttpContext.Session.GetString("Username");
             if (!string.IsNullOrEmpty(username))

@@ -458,3 +458,28 @@
         font-size: 1.3rem;
     }
 }
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* KÍCH HOẠT FLEXBOX CHO BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 60px;
+}
+
+/* Phần nội dung chính (main) sẽ tự động giãn ra */
+.flex-grow-1 {
+    flex-grow: 1;
+}

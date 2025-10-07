@@ -15,21 +15,19 @@ namespace DoAn_QuanLyThuVienSach.Controllers
 
         public IActionResult Index(int page = 1)
         {
-
             int pageSize = 12; // số sách trên 1 trang
-            var books = db.Books.OrderBy(b => b.BookId).ToPagedList(page, pageSize);
+            var books = db.Books
+                .Include(b => b.BookAuthors)                 
+                .ThenInclude(ba => ba.Author)              
+                .OrderBy(b => b.BookId)                      
+                .ToPagedList(page, pageSize);
 
             var username = HttpContext.Session.GetString("Username");
 
             if (!string.IsNullOrEmpty(username))
                 ViewBag.Username = username;
 
-            ViewBag.CategoryGroups = db.CategoryGroups
-                                 .Include(g => g.Categories.OrderBy(c => c.Name)) // Sắp xếp thể loại con
-                                 .OrderBy(g => g.Name) // Sắp xếp nhóm cha
-                                 .ToList();
-
-            HttpContext.Session.SetString("Username", username!);
+            LoadMenu();
 
             return View(books);
         }
@@ -114,6 +112,9 @@ namespace DoAn_QuanLyThuVienSach.Controllers
         public IActionResult Search(string keyword, int page = 1)
         {
             int pageSize = 12; // Số sách trên 1 trang
+            var username = HttpContext.Session.GetString("Username");
+            if (!string.IsNullOrEmpty(username))
+                ViewBag.Username = username;
 
             // Khởi tạo truy vấn
             IQueryable<Book> query = db.Books;
@@ -134,8 +135,14 @@ namespace DoAn_QuanLyThuVienSach.Controllers
                 ViewBag.Keyword = keyword;
             }
 
+            LoadMenu();
+
             // Sắp xếp và phân trang kết quả
-            var searchResults = query.OrderBy(b => b.BookId).ToPagedList(page, pageSize);
+            var searchResults = query
+                .Include(b => b.BookAuthors)
+                .ThenInclude(ba => ba.Author)
+                .OrderBy(b => b.BookId)
+                .ToPagedList(page, pageSize);
 
             // Lưu thông báo kết quả tìm kiếm (Tùy chọn)
             ViewBag.SearchCount = searchResults.TotalItemCount;
@@ -145,21 +152,18 @@ namespace DoAn_QuanLyThuVienSach.Controllers
         }
 
         // GET: /TrangChu/Detail/5
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            // Lấy username để hiển thị Header
             var username = HttpContext.Session.GetString("Username");
             if (!string.IsNullOrEmpty(username))
                 ViewBag.Username = username;
 
-            // Sử dụng Eager Loading để tải thông tin Tác giả và Nhà xuất bản
             var book = db.Books
                 .Include(b => b.BookAuthors)
                     .ThenInclude(ba => ba.Author)
                 .Include(b => b.Publisher)
-                // 🌟 THÊM PHẦN TẢI THÔNG TIN THỂ LOẠI 🌟
-                .Include(b => b.BookCategories) // Tải bảng trung gian BookCategory
-                    .ThenInclude(bc => bc.Category) // Tải thông tin Category
+                .Include(b => b.BookCategories) 
+                    .ThenInclude(bc => bc.Category) 
                 .FirstOrDefault(b => b.BookId == id);
 
             if (book == null)
@@ -167,11 +171,39 @@ namespace DoAn_QuanLyThuVienSach.Controllers
                 return NotFound();
             }
 
-            // TÍNH TOÁN SỐ LƯỢNG SÁCH CÓ THỂ MƯỢN (Giả định có thuộc tính AvailableCopies)
-            // Nếu không có AvailableCopies, bạn có thể tự thêm nó hoặc dùng TotalCopies.
+            int currentlyLoanedCount = await db.Loans
+                .Where(l => l.BookId == id && l.DateReturned == null)
+                .SumAsync(l => l.Quantity);
+
+            int availableCopies = book.TotalCopies - currentlyLoanedCount;
+
+            ViewBag.AvailableCopies = availableCopies;
+
             ViewBag.IsAvailable = book.TotalCopies > 0;
 
             return View(book);
+        }
+
+        private void LoadMenu()
+        {
+            var menuData = db.CategoryGroups
+                .Include(g => g.Categories.OrderBy(c => c.Name))
+                .OrderBy(g => g.Name)
+                .Select(g => new CategoryGroupMenuVM // SỬ DỤNG VIEW MODEL CÓ BookCount
+                {
+                    CategoryGroupId = g.CategoryGroupId,
+                    Name = g.Name,
+                    IconClass = g.IconClass,
+                    Categories = g.Categories.ToList(),
+                    BookCount = db.BookCategories
+                        .Where(bc => bc.Category.CategoryGroupId == g.CategoryGroupId)
+                        .Select(bc => bc.BookId)
+                        .Distinct()
+                        .Count()
+                })
+            .ToList();
+
+            ViewBag.CategoryGroups = menuData; // Gán List<CategoryGroupMenuVM>
         }
     }
 }

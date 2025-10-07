@@ -19,26 +19,14 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public int TotalCopies { get; set; }
 
-        public virtual Publisher Publisher { get; set; }
+        public virtual Publisher Publisher { get; set; } = null!;
 
-        public ICollection<BookAuthor> BookAuthors { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; } = null!;
 
-        public ICollection<BookCategory> BookCategories { get; set; }
+        public ICollection<BookCategory> BookCategories { get; set; } = null!;
 
-        public virtual ICollection<Loan> Loans { get; set; }
+        public virtual ICollection<Loan> Loans { get; set; } = null!;
 
-        public Book() {
-            BookId = 0;
-            Title = string.Empty;
-            PublisherId = 0;
-            PublicationYear = 0;
-            Description = string.Empty;
-            CoverImage = string.Empty;
-            TotalCopies = 0;
-            Publisher = new Publisher();
-            BookAuthors = new List<BookAuthor>();
-            BookCategories = new List<BookCategory>();
-            Loans = new List<Loan>();
-        }
+        public Book() { }
     }
 }

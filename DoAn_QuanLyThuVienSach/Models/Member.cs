@@ -24,20 +24,10 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public DateTime DateCreated { get; set; }
 
-        public virtual Role Role { get; set; }
+        public virtual Role Role { get; set; } = null!;
 
-        public virtual ICollection<Loan> Loans { get; set; }
+        public virtual ICollection<Loan> Loans { get; set; } = null!;
 
-        public Member() {
-            MemberId = 0;
-            Name = string.Empty;
-            Email = string.Empty;
-            Password = string.Empty;
-            PhoneNumber = string.Empty;
-            Address = string.Empty;
-            DateCreated = DateTime.MinValue;
-            Role = new Role();
-            Loans = new List<Loan>();
-        }
+        public Member() { }
     }
 }

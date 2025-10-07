@@ -11,16 +11,10 @@ namespace DoAn_QuanLyThuVienSach.Models
         [ForeignKey("Author")]
         public int AuthorId { get; set; }
 
-        public virtual Book Book { get; set; }
+        public virtual Book Book { get; set; } = null!;
 
-        public virtual Author Author { get; set; }
+        public virtual Author Author { get; set; } = null!;
 
-        public BookAuthor()
-        {
-            BookId = 0;
-            AuthorId = 0;
-            Book = new Book();
-            Author = new Author();
-        }
+        public BookAuthor() { }
     }
 }

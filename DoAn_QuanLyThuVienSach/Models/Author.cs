@@ -11,13 +11,8 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public string Bio { get; set; }
 
-        public ICollection<BookAuthor> BookAuthors { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; } = null!;
 
-        public Author() {
-            AuthorId = 0;
-            Name = string.Empty;
-            Bio = string.Empty;
-            BookAuthors = new List<BookAuthor>();
-        }
+        public Author() {}
     }
 }

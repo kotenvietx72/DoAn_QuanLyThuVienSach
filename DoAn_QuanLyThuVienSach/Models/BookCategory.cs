@@ -10,16 +10,10 @@ namespace DoAn_QuanLyThuVienSach.Models
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
 
-        public virtual Book Book { get; set; }
+        public virtual Book Book { get; set; } = null!;
 
-        public virtual Category Category { get; set; }
+        public virtual Category Category { get; set; } = null!;
 
-        public BookCategory()
-        {
-            BookId = 0;
-            CategoryId = 0;
-            Book = new Book();
-            Category = new Category();
-        }
+        public BookCategory() { }
     }
 }
