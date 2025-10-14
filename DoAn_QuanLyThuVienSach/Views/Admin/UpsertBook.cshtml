@@ -5,17 +5,16 @@
 }
 
 <style>
-    /* Style chung cho Select2 container */
+    /* Style chung cho Select2 container để khớp với input của Tailwind */
     .select2-container .select2-selection {
-        border: 1px solid #d1d5db; /* Giống border-gray-300 của Tailwind */
-        border-radius: 0.375rem; /* Giống rounded-md của Tailwind */
-        height: 42px; /* Đồng bộ chiều cao */
-        padding: 0.25rem 0;
+        border: 1px solid #d1d5db; /* Giống border-gray-300 */
+        border-radius: 0.375rem; /* Giống rounded-md */
+        height: 42px; /* Đồng bộ chiều cao với input (p-2 + border) */
     }
 
-    /* Style cho ô select đơn (Nhà xuất bản) */
+    /* Căn giữa text theo chiều dọc cho ô chọn đơn (Nhà xuất bản) */
     .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 40px;
+        line-height: 40px; /* Căn giữa trong box 42px */
         padding-left: 0.75rem;
     }
 
@@ -23,13 +22,13 @@
         height: 40px;
     }
 
-    /* Style cho ô select đa lựa chọn (Thể loại) */
+    /* Style cho ô chọn đa lựa chọn (Thể loại) */
     .select2-container--default .select2-selection--multiple {
-        height: auto; /* Cho phép giãn ra khi có nhiều tag */
-        min-height: 42px;
+        min-height: 42px; /* Dùng min-height để nó có thể giãn ra */
+        padding: 0.2rem; /* Tinh chỉnh padding cho các tag */
     }
 
-    /* Hiệu ứng khi được focus (viền xanh) */
+    /* Hiệu ứng focus (viền xanh) cho đồng bộ */
     .select2-container--default.select2-container--focus .select2-selection {
         border-color: #4f46e5; /* Màu primary của bạn */
         box-shadow: 0 0 0 1px #4f46e5;
@@ -37,7 +36,7 @@
 </style>
 
 <div class="bg-white p-6 rounded-xl shadow-lg">
-    <form method="post" asp-action="UpsertBook">
+    <form method="post" asp-action="UpsertBook" enctype="multipart/form-data">
         <input type="hidden" asp-for="Book.BookId" />
         <input type="hidden" asp-for="Book.CoverImage" />
 

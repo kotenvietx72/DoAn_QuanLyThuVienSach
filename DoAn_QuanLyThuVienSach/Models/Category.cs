@@ -13,7 +13,7 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public int CategoryGroupId { get; set; }
 
-        public ICollection<BookCategory> BookCategories { get; set; } = null!;
+        public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
 
         public CategoryGroup CategoryGroup { get; set; } = null!;
 

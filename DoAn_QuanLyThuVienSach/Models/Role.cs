@@ -9,7 +9,7 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public string RoleName { get; set; }
 
-        public virtual ICollection<Member> Members { get; set; } = null!;
+        public virtual ICollection<Member> Members { get; set; } = new List<Member>();
 
         public Role() { }
     }

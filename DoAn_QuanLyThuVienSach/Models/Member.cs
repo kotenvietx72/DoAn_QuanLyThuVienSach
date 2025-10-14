@@ -26,7 +26,7 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public virtual Role Role { get; set; } = null!;
 
-        public virtual ICollection<Loan> Loans { get; set; } = null!;
+        public virtual ICollection<Loan> Loans { get; set; } = new List<Loan>();
 
         public Member() { }
     }

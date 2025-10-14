@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-iconpicker/1.10.0/css/bootstrap-iconpicker.min.css" />
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -29,7 +32,7 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <aside id="sidebar" class="w-64 bg-gray-800 text-white flex-shrink-0 flex flex-col overflow-y-auto">
+    <aside id="sidebar" class="w-72 bg-gray-800 text-white flex-shrink-0 flex flex-col overflow-y-auto">
         <div class="p-6 text-xl font-bold text-indigo-400 border-b border-gray-700">
             <i class="fas fa-tools mr-2"></i> ADMIN DASHBOARD
         </div>
@@ -48,6 +51,9 @@
             </a>
             <a asp-controller="Admin" asp-action="Index" asp-route-module="category" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("category")">
                 <i class="fas fa-tags mr-3 w-5 text-center"></i> Quản lý Thể loại
+            </a>
+            <a asp-controller="Admin" asp-action="Index" asp-route-module="categorygroup" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("categorygroup")">
+                <i class="fas fa-layer-group mr-3 w-5 text-center"></i> Quản lý Nhóm Thể loại
             </a>
             <a asp-controller="Admin" asp-action="Index" asp-route-module="member" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("member")">
                 <i class="fas fa-users mr-3 w-5 text-center"></i> Quản lý Thành viên
@@ -70,7 +76,7 @@
         </nav>
 
         <div class="p-4 border-t border-gray-700 text-center text-sm text-gray-400">
-            © 2024 Quản Trị Thư Viện
+            © 2025 Thư Viện Vanh Vanh
         </div>
     </aside>
 
@@ -83,8 +89,7 @@
                 string upsertAction = "Upsert" + char.ToUpper(currentModule[0]) + currentModule.Substring(1);
             }
 
-            @* Nút "Thêm Mới" sẽ chỉ hiển thị cho các module có chức năng Thêm Mới *@
-            @if (new[] { "book", "category", "member" }.Contains(currentModule))
+            @if (new[] { "book", "category", "member", "categorygroup" }.Contains(currentModule))
             {
                 <a asp-controller="Admin" asp-action="@upsertAction" class="bg-primary hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md flex items-center transition duration-200">
                     <i class="fas fa-plus mr-2"></i> Thêm Mới
@@ -97,7 +102,7 @@
         </main>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

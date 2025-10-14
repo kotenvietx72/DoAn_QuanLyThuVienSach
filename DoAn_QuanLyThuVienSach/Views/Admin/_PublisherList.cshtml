@@ -5,7 +5,7 @@
         <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên Nhà Xuất Bản</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Địa Chỉ</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Địa chỉ</th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Thao tác</th>
         </tr>
     </thead>
@@ -15,7 +15,7 @@
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.PublisherId</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.Name</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.Address</td>
+                <td class="px-6 py-4 max-w-sm text-sm text-gray-500 truncate">@item.Address</td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a asp-action="EditPublisher" asp-route-id="@item.PublisherId" class="text-indigo-600 hover:text-indigo-900" title="Sửa">
                         <i class="fas fa-edit"></i> Sửa

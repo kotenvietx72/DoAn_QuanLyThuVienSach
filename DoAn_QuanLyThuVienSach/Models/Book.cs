@@ -21,9 +21,9 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public virtual Publisher Publisher { get; set; } = null!;
 
-        public ICollection<BookAuthor> BookAuthors { get; set; } = null!;
+        public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
 
-        public ICollection<BookCategory> BookCategories { get; set; } = null!;
+        public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
 
         public virtual ICollection<Loan> Loans { get; set; } = null!;
 

@@ -11,7 +11,7 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public string IconClass { get; set; }
 
-        public ICollection<Category> Categories { get; set; } = null!;
+        public ICollection<Category> Categories { get; set; } = new List<Category>();
 
         public CategoryGroup() { }
     }

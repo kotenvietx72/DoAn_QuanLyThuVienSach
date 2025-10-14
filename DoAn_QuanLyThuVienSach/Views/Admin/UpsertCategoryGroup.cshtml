@@ -1,0 +1,32 @@
+﻿@model DoAn_QuanLyThuVienSach.Models.CategoryGroup
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = Model.CategoryGroupId == 0 ? "Thêm Nhóm Thể loại" : "Chỉnh sửa Nhóm Thể loại";
+}
+
+<div class="bg-white p-6 rounded-xl shadow-lg">
+    <form method="post" asp-action="UpsertCategoryGroup">
+        <input type="hidden" asp-for="CategoryGroupId" />
+
+        <div class="space-y-4">
+            <div>
+                <label asp-for="Name" class="block text-sm font-medium text-gray-700">Tên Nhóm Thể loại</label>
+                <input asp-for="Name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
+            </div>
+
+            <div>
+                <label asp-for="IconClass" class="block text-sm font-medium text-gray-700">Icon Class (ví dụ: fas fa-book)</label>
+                <input asp-for="IconClass" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <span asp-validation-for="IconClass" class="text-red-500 text-sm"></span>
+            </div>
+        </div>
+
+        <div class="pt-4 mt-4 flex items-center space-x-4">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md flex items-center">
+                @(Model.CategoryGroupId == 0 ? "Thêm mới" : "Cập nhật")
+            </button>
+            <a asp-action="Index" asp-route-module="categorygroup" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md">Hủy</a>
+        </div>
+    </form>
+</div>

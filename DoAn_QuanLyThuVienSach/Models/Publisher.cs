@@ -11,7 +11,7 @@ namespace DoAn_QuanLyThuVienSach.Models
 
         public string Address { get; set; }
 
-        public virtual ICollection<Book> Books { get; set; } = null!;
+        public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 
         public Publisher() { }
     }
