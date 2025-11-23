@@ -1,7 +1,13 @@
 ﻿using DoAn_QuanLyThuVienSach.Data;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = LicenseType.Community;
+
+ExcelPackage.License.SetNonCommercialPersonal("Quản lý thư viện");
 
 builder.Services.AddSession(options =>
 {
@@ -21,6 +27,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -39,7 +46,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}")
+    pattern: "{controller=TrangChu}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 

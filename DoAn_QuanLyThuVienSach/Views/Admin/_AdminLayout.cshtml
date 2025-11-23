@@ -37,43 +37,79 @@
             <i class="fas fa-tools mr-2"></i> ADMIN DASHBOARD
         </div>
 
+        @{
+            string currentModule = ViewData["CurrentModule"] as string ?? "book";
+            Func<string, string> IsActive = (m) => currentModule == m ? "active" : "";
+        }
+
         <nav class="flex-grow p-4 space-y-2">
-            @{
-                // Helper function để làm nổi bật menu đang được chọn
-                string currentModule = ViewData["CurrentModule"] as string ?? "book";
-                string IsActive(string module) => currentModule == module.ToLower() ? "active" : "";
-            }
 
-            <div class="text-xs font-semibold uppercase text-gray-400 pt-4 pb-1">Quản lý</div>
+            <a asp-controller="Admin" asp-action="Dashboard"
+               class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("dashboard")">
+                <i class="fas fa-chart-pie mr-3 w-5 text-center"></i> Tổng quan
+            </a>
 
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="book" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("book")">
-                <i class="fas fa-book mr-3 w-5 text-center"></i> Quản lý Sách
-            </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="category" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("category")">
-                <i class="fas fa-tags mr-3 w-5 text-center"></i> Quản lý Thể loại
-            </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="categorygroup" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("categorygroup")">
-                <i class="fas fa-layer-group mr-3 w-5 text-center"></i> Quản lý Nhóm Thể loại
-            </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="member" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("member")">
+            <!-- QUẢN LÝ (cha) -->
+            <button type="button"
+                    class="menu-item flex items-center justify-between p-3 text-sm font-medium hover:bg-gray-700 rounded-lg w-full"
+                    onclick="document.getElementById('submenu-manage').classList.toggle('hidden')">
+                <span class="flex items-center">
+                    <i class="fas fa-cogs mr-3 w-5 text-center"></i>
+                    Quản lý
+                </span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <!-- SUBMENU: 5 mục -->
+            <div id="submenu-manage" class="space-y-1 ml-6 mt-1 @(new[] { "book", "category", "categorygroup", "author", "publisher" }.Contains(currentModule) ? "" : "hidden")">
+
+                <a asp-controller="Admin" asp-action="Index" asp-route-module="book"
+                   class="menu-item flex items-center p-3 text-sm hover:bg-gray-700 rounded-lg @IsActive("book")">
+                    <i class="fas fa-book mr-3 w-5 text-center"></i> Quản lý Sách
+                </a>
+
+                <a asp-controller="Admin" asp-action="Index" asp-route-module="category"
+                   class="menu-item flex items-center p-3 text-sm hover:bg-gray-700 rounded-lg @IsActive("category")">
+                    <i class="fas fa-tags mr-3 w-5 text-center"></i> Quản lý Thể loại
+                </a>
+
+                <a asp-controller="Admin" asp-action="Index" asp-route-module="categorygroup"
+                   class="menu-item flex items-center p-3 text-sm hover:bg-gray-700 rounded-lg @IsActive("categorygroup")">
+                    <i class="fas fa-layer-group mr-3 w-5 text-center"></i> Nhóm Thể loại
+                </a>
+
+                <a asp-controller="Admin" asp-action="Index" asp-route-module="author"
+                   class="menu-item flex items-center p-3 text-sm hover:bg-gray-700 rounded-lg @IsActive("author")">
+                    <i class="fas fa-feather-alt mr-3 w-5 text-center"></i> Tác giả
+                </a>
+
+                <a asp-controller="Admin" asp-action="Index" asp-route-module="publisher"
+                   class="menu-item flex items-center p-3 text-sm hover:bg-gray-700 rounded-lg @IsActive("publisher")">
+                    <i class="fas fa-building mr-3 w-5 text-center"></i> NXB
+                </a>
+
+            </div>
+
+            <!-- 2 mục ngoài submenu -->
+            <a asp-controller="Admin" asp-action="Index" asp-route-module="member"
+               class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("member")">
                 <i class="fas fa-users mr-3 w-5 text-center"></i> Quản lý Thành viên
             </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="loan" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("loan")">
+
+            <a asp-controller="Admin" asp-action="Index" asp-route-module="loan"
+               class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("loan")">
                 <i class="fas fa-hand-holding-usd mr-3 w-5 text-center"></i> Quản lý Mượn
-            </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="author" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("author")">
-                <i class="fas fa-feather-alt mr-3 w-5 text-center"></i> Quản lý Tác giả
-            </a>
-            <a asp-controller="Admin" asp-action="Index" asp-route-module="publisher" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg @IsActive("publisher")">
-                <i class="fas fa-building mr-3 w-5 text-center"></i> Quản lý NXB
             </a>
 
             <div class="border-t border-gray-700 my-4"></div>
 
-            <a asp-controller="TrangChu" asp-action="Index" class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg">
+            <a asp-controller="TrangChu" asp-action="Index"
+               class="menu-item flex items-center p-3 text-sm font-medium hover:bg-gray-700 rounded-lg">
                 <i class="fas fa-home mr-3 w-5 text-center"></i> Quay về trang chủ
             </a>
+
         </nav>
+
 
         <div class="p-4 border-t border-gray-700 text-center text-sm text-gray-400">
             © 2025 Thư Viện Vanh Vanh
@@ -82,7 +118,15 @@
 
     <div class="content-area flex-grow overflow-y-auto">
         <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-10">
-            <h1 class="text-2xl font-semibold text-gray-800">@ViewData["Title"]</h1>
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-800">@ViewData["Title"]</h1>
+
+                <!-- Dòng thêm mới theo yêu cầu -->
+                <div class="text-sm text-gray-500 mt-1 flex items-center gap-2">
+                    <i class="fas fa-book-open text-indigo-600"></i>
+                    <span>Thư Viện Vanh Vanh</span>
+                </div>
+            </div>
 
             @{
                 // Logic để tạo link "Thêm Mới" động
@@ -104,6 +148,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

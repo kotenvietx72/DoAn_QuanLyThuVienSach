@@ -1,0 +1,107 @@
+﻿@model DoAn_QuanLyThuVienSach.ViewModel.DashboardVM
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="space-y-6">
+
+    <!-- KPI -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg">
+            <div class="text-sm opacity-80">Tổng số sách</div>
+            <div class="text-3xl font-bold mt-2">@Model.TotalBooks</div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-lg">
+            <div class="text-sm opacity-80">Đang mượn</div>
+            <div class="text-3xl font-bold mt-2">@Model.BorrowingCount</div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-rose-500 to-orange-400 text-white shadow-lg">
+            <div class="text-sm opacity-80">Quá hạn</div>
+            <div class="text-3xl font-bold mt-2">@Model.OverdueCount</div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-400 text-white shadow-lg">
+            <div class="text-sm opacity-80">Thành viên</div>
+            <div class="text-3xl font-bold mt-2">@Model.TotalMembers</div>
+        </div>
+    </div>
+
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="xl:col-span-2 p-4 bg-white rounded-xl shadow-md">
+            <h2 class="font-semibold mb-3">Mượn / Trả 14 ngày gần nhất</h2>
+            <div id="chartBorrowReturn"></div>
+        </div>
+
+        <div class="p-4 bg-white rounded-xl shadow-md">
+            <h2 class="font-semibold mb-3">Tình trạng mượn sách</h2>
+            <div id="chartStatus"></div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+        <div class="p-4 bg-white rounded-xl shadow-md">
+            <h2 class="font-semibold mb-3">Top 10 sách mượn nhiều nhất</h2>
+            <div id="chartTopBooks"></div>
+        </div>
+
+        <div class="p-4 bg-white rounded-xl shadow-md">
+            <h2 class="font-semibold mb-3">Top thể loại được mượn nhiều</h2>
+            <div id="chartTopCategories"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+        // Borrow/Return chart
+        new ApexCharts(document.querySelector("#chartBorrowReturn"), {
+            chart: { type: 'line', height: 330, toolbar: { show: false } },
+            stroke: { curve: 'smooth', width: 3 },
+            colors: ['#4f46e5', '#10b981'],
+            series: [
+                { name: 'Mượn', data: @Html.Raw(Json.Serialize(Model.BorrowCounts)) },
+                { name: 'Trả', data: @Html.Raw(Json.Serialize(Model.ReturnCounts)) }
+            ],
+            xaxis: { categories: @Html.Raw(Json.Serialize(Model.Last14DaysLabels)) }
+        }).render();
+
+        // Status pie
+        new ApexCharts(document.querySelector("#chartStatus"), {
+            chart: { type: 'donut', height: 320 },
+            labels: ['Đã trả', 'Quá hạn', 'Đang mượn'],
+            colors: ['#10b981', '#ef4444', '#f59e0b'],
+            series: [
+                @Model.StatusReturned,
+                @Model.StatusOverdue,
+                @Model.StatusBorrowing
+            ]
+        }).render();
+
+        // Top Books
+        new ApexCharts(document.querySelector("#chartTopBooks"), {
+            chart: { type: 'bar', height: 350 },
+            plotOptions: { bar: { horizontal: true, borderRadius: 5 } },
+            series: [{ data: @Html.Raw(Json.Serialize(Model.TopBookCounts)) }],
+            xaxis: { categories: @Html.Raw(Json.Serialize(Model.TopBookLabels)) }
+        }).render();
+
+        // Top Categories
+        new ApexCharts(document.querySelector("#chartTopCategories"), {
+            chart: { type: 'bar', height: 350 },
+            plotOptions: { bar: { horizontal: true, borderRadius: 5 } },
+            series: [{ data: @Html.Raw(Json.Serialize(Model.TopCategoryCounts)) }],
+            xaxis: { categories: @Html.Raw(Json.Serialize(Model.TopCategoryLabels)) }
+        }).render();
+    </script>
+}

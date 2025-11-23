@@ -7,26 +7,87 @@
 
 <div class="bg-white p-6 rounded-xl shadow-lg">
 
-    <div class="mb-6">
-        <form asp-action="Index" method="get" class="flex items-center w-full max-w-lg">
-            <input type="hidden" name="module" value="@(ViewData["CurrentModule"])" />
+    <!-- Hàng 1: Search + Export -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
 
-            <div class="relative w-full">
-                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Tìm kiếm..." class="p-3 w-full border border-gray-300 rounded-l-lg focus:ring-primary focus:border-primary">
-                @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"] as string))
-                {
-                    <a asp-action="Index" asp-route-module="@(ViewData["CurrentModule"])" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600" title="Xóa bộ lọc">
-                        <i class="fas fa-times-circle"></i>
-                    </a>
-                }
-            </div>
-            <button type="submit" class="bg-primary text-white p-3 rounded-r-lg hover:bg-indigo-600 transition duration-150">
+        <!-- SEARCH -->
+        <form asp-action="Index" method="get" class="flex items-center flex-grow max-w-xl">
+            <input type="hidden" name="module" value="@ViewData["CurrentModule"]" />
+
+            <input type="text"
+                   name="searchString"
+                   value="@ViewData["CurrentFilter"]"
+                   placeholder="Tìm kiếm..."
+                   class="p-3 w-full border border-gray-300 rounded-l-lg focus:ring-primary focus:border-primary" />
+
+            <button type="submit"
+                    class="bg-primary text-white p-3 rounded-r-lg hover:bg-indigo-600 transition">
                 <i class="fas fa-search"></i>
             </button>
         </form>
+
+        <!-- EXPORT BUTTONS -->
+        <div class="flex items-center gap-3">
+
+            <a asp-action="ExportExcel"
+               asp-route-module="@ViewData["CurrentModule"]"
+               asp-route-searchString="@ViewData["CurrentFilter"]"
+               asp-route-memberId="@ViewBag.SelectedMemberId"
+               asp-route-status="@ViewBag.SelectedStatus"
+               class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow">
+                <i class="fas fa-file-excel mr-2"></i> Export Excel
+            </a>
+
+            <a asp-action="ExportPdf"
+               asp-route-module="@ViewData["CurrentModule"]"
+               asp-route-searchString="@ViewData["CurrentFilter"]"
+               asp-route-memberId="@ViewBag.SelectedMemberId"
+               asp-route-status="@ViewBag.SelectedStatus"
+               class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow">
+                <i class="fas fa-file-pdf mr-2"></i> Export PDF
+            </a>
+
+        </div>
+
     </div>
 
-    <div class="overflow-x-auto">
+    <!-- Hàng 2: Filter chỉ có ở Loan -->
+    @if ((ViewData["CurrentModule"] as string)?.ToLower() == "loan")
+    {
+        <form asp-action="Index" method="get" class="flex flex-wrap items-center gap-3">
+
+            <input type="hidden" name="module" value="loan" />
+            <input type="hidden" name="searchString" value="@ViewData["CurrentFilter"]" />
+
+            <!-- Filter người mượn -->
+            <select name="memberId" class="border border-gray-300 rounded-lg p-2 text-sm">
+                <option value="">Tất cả</option>
+                @foreach (var m in ViewBag.AllMembers)
+                {
+                    <option value="@m.MemberId" selected="@(m.MemberId == ViewBag.SelectedMemberId)">
+                        @m.Name
+                    </option>
+                }
+            </select>
+
+            <!-- Filter tình trạng -->
+            <select name="status" class="border border-gray-300 rounded-lg p-2 text-sm">
+                <option value="">Tất cả</option>
+                <option value="returned" selected="@(ViewBag.SelectedStatus == "returned")">Đã trả</option>
+                <option value="overdue" selected="@(ViewBag.SelectedStatus == "overdue")">Quá hạn</option>
+                <option value="borrowing" selected="@(ViewBag.SelectedStatus == "borrowing")">Đang mượn</option>
+            </select>
+
+            <button type="submit"
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow">
+                Lọc
+            </button>
+        </form>
+    }
+
+
+    <!-- TABLE CONTENT -->
+    <div class="overflow-x-auto mt-4">
         @if (!string.IsNullOrEmpty(partialViewName) && moduleData != null)
         {
             @await Html.PartialAsync(partialViewName, moduleData)
@@ -36,6 +97,7 @@
             <p>Module không hợp lệ.</p>
         }
     </div>
+
 </div>
 
 @section Scripts {

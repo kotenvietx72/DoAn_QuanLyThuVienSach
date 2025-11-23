@@ -7,6 +7,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên Sách</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Người Mượn</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ngày Mượn</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ngày Trả</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số lượng</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tình Trạng</th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Thao tác</th>
@@ -20,6 +21,10 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.Book?.Title</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.Member?.Name</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.DateBorrowed.ToString("dd/MM/yyyy")</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    @(item.DateReturned == null ? "Chưa trả"
+                                    : item.DateReturned.Value.ToString("dd/MM/yyyy"))
+                </td>   
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.Quantity</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                     @if (item.DateReturned != null)
